@@ -1,0 +1,12 @@
+[] = Pending
+[x] = Done
+[-] = Partial Done
+
+
+# Important
+[-] port to GUI 100%
+
+# Later work
+[-] Make text more readable and nice
+[x] Add random password generator
+[] Add Backup/Import feature

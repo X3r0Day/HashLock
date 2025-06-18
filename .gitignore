@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+config.json
+data.json
+file_perm.py
