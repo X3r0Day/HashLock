@@ -103,14 +103,59 @@ class OpenEditFileUI:
             messagebox.showerror("Error", "File data missing.")
             return
 
-        info = (
+        info_text = (
             f"{filename}\n\n"
             f"Email: {entry.get('email', '')}\n"
             f"Username: {entry.get('username', '')}\n"
             f"Password: {entry.get('password', '')}\n"
             f"Notes:\n{entry.get('notes', '')}\n"
         )
-        messagebox.showinfo("File Info", info)
+        self.show_info_popup("File Info", info_text)
+    
+
+    # The old messagebox wasn't looking very fine on hyprland(tho it was okay on windows... but I use arch, btw with hyprland. so yes.)
+
+    def show_info_popup(self, title, text):
+        popup = tk.Toplevel(self.master)
+        popup.title(title)
+        popup.resizable(True, True)
+
+        width, height = 500, 350
+        screen_width = popup.winfo_screenwidth()
+        screen_height = popup.winfo_screenheight()
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        popup.geometry(f"{width}x{height}+{x}+{y}")
+
+        padding = 15
+        popup_frame = ttk.Frame(popup, padding=padding)
+        popup_frame.pack(fill="both", expand=True)
+
+        text_widget = tk.Text(
+            popup_frame,
+            wrap="word",
+            font=("Segoe UI", 12),
+            bg=popup.cget("bg"),
+            fg="white",
+            relief="flat",
+            borderwidth=0,
+            highlightthickness=0
+        )
+
+        text_widget.pack(side="left", fill="both", expand=True)
+        text_widget.insert("1.0", text)
+        text_widget.config(state="disabled")
+
+        scrollbar = ttk.Scrollbar(popup_frame, orient="vertical", command=text_widget.yview)
+        scrollbar.pack(side="right", fill="y")
+        text_widget.config(yscrollcommand=scrollbar.set)
+
+        close_btn = ttk.Button(popup, text="Close", command=popup.destroy)
+        close_btn.pack(pady=(5, 10))
+
+        popup.transient(self.master)
+        popup.grab_set()
+        popup.focus_force()
 
     def edit_selected(self):
         filename = self.get_selected_filename()
@@ -136,10 +181,14 @@ class EditFormUI:
         self.save_func = save_func
         self.callback = callback
 
+        self.icons = {
+            "save": load_icon("save.png")
+        }
+
         self.frame = ttk.Frame(master, padding=20)
         self.frame.pack(fill="both", expand=True)
 
-        ttk.Label(self.frame, text=f"✏️ Edit File: {filename}", font=("Segoe UI", 16)).pack(pady=10)
+        ttk.Label(self.frame, image=self.icons["pencil"], text=f"Edit File: {filename}", compound="left", font=("Segoe UI", 16)).pack(pady=10)
 
         self.fields = {}
         for field in ["email", "username", "password", "notes"]:
@@ -149,7 +198,7 @@ class EditFormUI:
             entry_box.pack(pady=5)
             self.fields[field] = entry_box
 
-        ttk.Button(self.frame, text="💾 Save", command=self.save).pack(pady=10)
+        ttk.Button(self.frame, image=self.icons["save"], text="Save", compound="left", command=self.save).pack(pady=10)
         ttk.Button(self.frame, text="← Cancel", command=self.cancel).pack(pady=5)
 
     def save(self):
