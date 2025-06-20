@@ -31,6 +31,10 @@ When you enter details, your secrets are stored in a `data.json` file with **Fer
 
 ## Installation
 
+### Windows - Direct Install
+Download release from [`HERE`](https://github.com/X3r0Day/HashLock/releases/tag/v1.0.0)
+
+---
 
 ### Windows/Linux/MacOS
 ```
