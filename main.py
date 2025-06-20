@@ -26,7 +26,6 @@ from actions import (
 import key_mngr
 
 
-
 def load_icon(filename, size=(20, 20)):
     img = Image.open(Path(__file__).parent / "icon" / filename)
     img = img.resize(size, Image.LANCZOS)
@@ -220,6 +219,8 @@ class PasswordManagerGUI:
 
 
 def main():
+    from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(1) # So that screen won't be blurry anymore on windwos
     root = tk.Tk()
     frame = ttk.Frame(root, padding=20)
     frame.pack(expand=True)
