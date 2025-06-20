@@ -1,3 +1,4 @@
+- FINALLY .EXE HAS BEEN RELEASE!!!
 - Changed the UI to Better (Transition to ttk)
 - Added Show Password/Hide Password Toggle Button
 - Added Random Password Generator

@@ -1,8 +1,9 @@
 from cryptography.fernet import Fernet
 from pathlib import Path
 import json
+from .save import user_data_path
 
-DATA_FILE = Path(__file__).parent.parent / "stor" / "data.json"
+DATA_FILE = user_data_path("stor/data.json")
 
 
 def load_data(fernet: Fernet):

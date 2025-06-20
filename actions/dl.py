@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 from cryptography.fernet import Fernet
 import sys
+from .save import user_data_path
 
 from tkinter import (
     ttk,
@@ -21,7 +22,7 @@ from colorama import (
 
 # sys.path.append(str(Path(__file__).parent.parent)) # To import key_mngr from root directory (Not needed anymore)
 
-DATA_FILE = Path(__file__).parent.parent / "stor" / "data.json"
+DATA_FILE = user_data_path("stor/data.json")
 
 class DeleteFileUI:
     def __init__(self, root, fernet: Fernet, callback):

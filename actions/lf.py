@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from cryptography.fernet import Fernet
+from .save import user_data_path
 
 from PIL import (
     Image,
@@ -16,7 +17,7 @@ from tkinter import (
 )
 
 
-DATA_FILE = Path(__file__).parent.parent / "stor" / "data.json"
+DATA_FILE = user_data_path("stor/data.json")
 
 def load_icon(filename, size=(20, 20)):
     img = Image.open(Path(__file__).parent.parent / "icon" / filename)

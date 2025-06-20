@@ -14,16 +14,18 @@ from pathlib import Path
 import sv_ttk
 
 
-
 from actions import (
     lf,
     nf,
     dl,
-    randpass
+    randpass,
+    save
 )
 
 
 import key_mngr
+
+
 
 def load_icon(filename, size=(20, 20)):
     img = Image.open(Path(__file__).parent / "icon" / filename)
@@ -31,7 +33,10 @@ def load_icon(filename, size=(20, 20)):
     return ImageTk.PhotoImage(img)
 
 
-CONFIG_FILE = Path(__file__).parent / "config.json"
+CONFIG_FILE = save.user_data_path("config.json")
+STOR_CONFIG_FILE = save.user_data_path("stor/config.json")
+DATA_FILE = save.user_data_path("stor/data.json")
+
 
 class PasswordManagerGUI:
     def __init__(self, root, frame):
@@ -137,8 +142,11 @@ class PasswordManagerGUI:
         if pwd != pwdConf:
             messagebox.showerror("Error", "Passwords do not match.")
             return
+        
+        pwd_bytes = pwd.encode('utf-8')
+        # print(type(pwd_bytes)) # DEBUG
 
-        hashed = bcrypt.hashpw(pwd.encode(), bcrypt.gensalt()).decode()
+        hashed = bcrypt.hashpw(pwd_bytes, bcrypt.gensalt()).decode('utf-8')
         with open(CONFIG_FILE, "w") as f:
             json.dump({"master_password": hashed}, f, indent=4)
 

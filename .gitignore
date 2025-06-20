@@ -5,3 +5,4 @@ config.json
 data.json
 file_perm.py
 icon/main.py
+build/
