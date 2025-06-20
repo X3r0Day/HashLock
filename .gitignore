@@ -4,3 +4,4 @@ __pycache__/
 config.json
 data.json
 file_perm.py
+icon/main.py

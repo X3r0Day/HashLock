@@ -6,7 +6,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
-import file_perm
 
 CONFIG_PATH = Path(__file__).parent / "stor" / "config.json"
 SALT_SIZE = 16  # 128-bit salt

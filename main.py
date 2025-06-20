@@ -2,6 +2,7 @@ import os
 import json
 import bcrypt
 import tkinter as tk
+from PIL import Image, ImageTk
 
 from tkinter import (
     messagebox,
@@ -24,6 +25,12 @@ from actions import (
 
 import key_mngr
 
+def load_icon(filename, size=(20, 20)):
+    img = Image.open(Path(__file__).parent / "icon" / filename)
+    img = img.resize(size, Image.LANCZOS)
+    return ImageTk.PhotoImage(img)
+
+
 CONFIG_FILE = Path(__file__).parent / "config.json"
 
 class PasswordManagerGUI:
@@ -35,6 +42,16 @@ class PasswordManagerGUI:
         self.password = None
         self.frame = frame
         self.frame.pack(expand=True)
+
+        self.icons = {
+            "add": load_icon("add.png"),
+            "folder": load_icon("folder.png"),
+            "key": load_icon("key.png"),
+            "lock": load_icon("lock.png"),
+            "pencil": load_icon("pencil.png"),
+            "view": load_icon("view.png"),
+            "bin": load_icon("bin.png"),
+        }
 
         sv_ttk.use_dark_theme()
         
@@ -169,12 +186,11 @@ class PasswordManagerGUI:
     def menu_ui(self):
         self.clear_window()
 
-        ttk.Label(self.frame, text="HashLock Password", font=("Segoe UI", 16)).grid(row=0, column=0, columnspan=2, padx=10, pady=10)
-        ttk.Button(self.frame, text="✚ New File", width=20, command=self.create_file).grid(row=1, column=0, padx=10, pady=10)
-        ttk.Button(self.frame, text="🗁 Open File", width=20, command=self.open_file).grid(row=2, column=0, padx=10, pady=10)
-        ttk.Button(self.frame, text="🗑️ Delete File", width=20, command=self.delete_file).grid(row=3, column=0, padx=10, pady=10)
-        ttk.Button(self.frame, text="✎ Edit File", width=20, command=self.edit_file).grid(row=4, column=0, padx=10, pady=10)
-        ttk.Button(self.frame, text="🔒 Exit", width=20, command=self.root.quit).grid(row=5, column=0, padx=10, pady=10)
+        ttk.Label(self.frame, text="HashLock Password", font=("Segoe UI", 16)).grid(row=0, column=0, columnspan=1, padx=10, pady=10)
+        ttk.Button(self.frame, image=self.icons["add"], text="New File", command=self.create_file, compound="left", width=10).grid(row=1, column=0, padx=10, pady=10)
+        ttk.Button(self.frame, image=self.icons["bin"], text="Delete File", command=self.delete_file, compound="left", width=10).grid(row=3, column=0, padx=10, pady=10)
+        ttk.Button(self.frame, image=self.icons["pencil"], text=" Edit File", command=self.edit_file, compound="left", width=10).grid(row=4, column=0, padx=10, pady=10)
+        ttk.Button(self.frame, image=self.icons["lock"], text="   Exit", command=self.root.quit, compound="left", width=10).grid(row=5, column=0, padx=10, pady=10)
 
     def create_file(self):
         self.clear_window()
@@ -184,21 +200,16 @@ class PasswordManagerGUI:
 
     def open_file(self):
         self.clear_window()
-        lf.load_data(self.fernet)
-        messagebox.showinfo("Info", "Data loaded successfully.")
-        self.menu_ui()
+        lf.OpenEditFileUI(self.frame, self.fernet, self.menu_ui)
 
     def delete_file(self):
         self.clear_window()
-        dl.delete_entry(self.fernet)
-        messagebox.showinfo("Info", "Entry deleted.")
-        self.menu_ui()
+        dl.DeleteFileUI(self.frame, self.fernet, self.menu_ui)
 
     def edit_file(self):
         self.clear_window()
-        lf.edit_data(self.fernet)
-        messagebox.showinfo("Info", "Data edited.")
-        self.menu_ui()
+        lf.OpenEditFileUI(self.frame, self.fernet, self.menu_ui)
+
 
 def main():
     root = tk.Tk()

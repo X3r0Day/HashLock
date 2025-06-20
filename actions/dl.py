@@ -3,6 +3,15 @@ import json
 from cryptography.fernet import Fernet
 import sys
 
+from tkinter import (
+    ttk,
+    messagebox
+)
+
+import tkinter as tk
+
+
+import sv_ttk
 
 from colorama import (
     Style,
@@ -14,47 +23,76 @@ from colorama import (
 
 DATA_FILE = Path(__file__).parent.parent / "stor" / "data.json"
 
-def load_data(fernet: Fernet):
-    if not DATA_FILE.exists():
-        return {}
-    with open(DATA_FILE, 'rb') as f:
-        encrypted = f.read()
-    try:
-        decrypted = fernet.decrypt(encrypted)
-        return json.loads(decrypted.decode())
-    except Exception as e:
-        print(f"{Style.BRIGHT}{Fore.RED}[x]{Style.RESET_ALL} reading encrypted data:", e)
-        return {}
+class DeleteFileUI:
+    def __init__(self, root, fernet: Fernet, callback):
+        self.root = root
+        self.fernet = fernet
+        self.callback = callback
+        self.frame = ttk.Frame(root)
+        self.frame.pack(fill="both", expand=True)
 
-def save_data(data: dict, fernet: Fernet):
-    serialized = json.dumps(data, indent=4).encode()
-    encrypted = fernet.encrypt(serialized)
-    with open(DATA_FILE, 'wb') as f:
-        f.write(encrypted)
+        self.build_ui()
 
-def delete_entry(fernet: Fernet):
-    data = load_data(fernet)
-    filenames = list(data.keys())
-    
-    if not filenames:
-        print("No entries to delete.")
-        return
+    def load_data(self):
+        if not DATA_FILE.exists():
+            return {}
+        with open(DATA_FILE, 'rb') as f:
+            encrypted = f.read()
+        try:
+            decrypted = self.fernet.decrypt(encrypted)
+            return json.loads(decrypted.decode())
+        except Exception:
+            messagebox.showerror("Error", "Cannot read encrypted data, Master Password seems to be inccorect")
+            return {}
 
-    print("\nAvailable Files:")
-    for i, name in enumerate(filenames):
-        print(f"{i + 1}. {name}")
-    
-    choice = input("Select file number to delete: ")
-    if not choice.isdigit() or int(choice) < 1 or int(choice) > len(filenames):
-        print("Invalid selection.")
-        return
+    def save_data(self, data):
+        serialized = json.dumps(data, indent=4).encode()
+        encrypted = self.fernet.encrypt(serialized)
+        with open(DATA_FILE, 'wb') as f:
+            f.write(encrypted)
 
-    f_name = filenames[int(choice) - 1]
+    def build_ui(self):
+        ttk.Label(self.frame, text="Select a file to delete:", font=("Segoe UI", 14)).pack(pady=10)
 
-    confirm = input(f"Are you sure you want to delete '{f_name}'? (y/N): ").lower()
-    if confirm == 'y':
-        del data[f_name]
-        save_data(data, fernet)
-        print(f"'{f_name}' has been deleted.")
-    else:
-        print("Deletion cancelled.")
+        self.file_listbox = tk.Listbox(self.frame, height=10, width=50)
+        self.file_listbox.pack(pady=10)
+
+        self.data = self.load_data()
+        self.filenames = list(self.data.keys())
+
+        if not self.filenames:
+            ttk.Label(self.frame, text="No entries available to delete.").pack(pady=10)
+            ttk.Button(self.frame, text="← Go Back", command=self.go_back).pack(pady=15)
+            return
+
+        for filename in self.filenames:
+            self.file_listbox.insert(tk.END, filename)
+
+        delete_btn = ttk.Button(self.frame, text="Delete Selected File", command=self.confirm_delete)
+        delete_btn.pack(pady=10)
+
+        back_btn = ttk.Button(self.frame, text="Back", command=self.go_back)
+        back_btn.pack(pady=5)
+
+    def confirm_delete(self):
+        selected = self.file_listbox.curselection()
+        if not selected:
+            messagebox.showwarning("Warning", "No file selected.")
+            return
+
+        index = selected[0]
+        filename = self.filenames[index]
+
+        confirm = messagebox.askyesno("Confirm", f"Are you sure you want to delete '{filename}'?")
+        if confirm:
+            del self.data[filename]
+            self.save_data(self.data)
+            messagebox.showinfo("Success", f"'{filename}' has been deleted.")
+            self.frame.destroy()
+            self.callback()
+        else:
+            messagebox.showinfo("Cancelled", "Deletion cancelled.")
+
+    def go_back(self):
+        self.frame.destroy()
+        self.callback()

@@ -2,12 +2,8 @@ from cryptography.fernet import Fernet
 from pathlib import Path
 import json
 
-# SECURITY_KEY = Path(__file__).parent.parent / "stor" / "security.key"
 DATA_FILE = Path(__file__).parent.parent / "stor" / "data.json"
 
-#def load_key():
-#    with open(SECURITY_KEY, "rb") as f:
-#        return f.read()
 
 def load_data(fernet: Fernet):
     if not DATA_FILE.exists():
