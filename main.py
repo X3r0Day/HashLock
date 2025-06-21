@@ -220,8 +220,9 @@ class PasswordManagerGUI:
 
 def main():
     
-    from ctypes import windll
-    windll.shcore.SetProcessDpiAwareness(1) # So that screen won't be blurry anymore on windwos
+    if os.name == "nt":
+        from ctypes import windll
+        windll.shcore.SetProcessDpiAwareness(1) # So that screen won't be blurry anymore on windwos
     root = tk.Tk()
     frame = ttk.Frame(root, padding=20)
     frame.pack(expand=True)
