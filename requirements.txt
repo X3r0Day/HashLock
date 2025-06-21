@@ -1,5 +1,5 @@
-colorama==0.4.6
-cryptography==45.0.4
-Pillow==11.2.1
+colorama
+cryptography
+Pillow
 bcrypt
-sv_ttk==2.6.1
+sv_ttk
