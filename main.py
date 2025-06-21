@@ -201,9 +201,13 @@ class PasswordManagerGUI:
 
     def create_file(self):
         self.clear_window()
-        nf.new_file(self.fernet)
-        messagebox.showinfo("Success", "New file created.")
-        self.menu_ui()
+
+        def on_done(success):
+            if success:
+                messagebox.showinfo("Success", "New file created.")
+            self.menu_ui()
+
+        nf.NewFileUI(self.frame, self.fernet, callback=on_done)
 
     def open_file(self):
         self.clear_window()
