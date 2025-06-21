@@ -182,7 +182,8 @@ class EditFormUI:
         self.callback = callback
 
         self.icons = {
-            "save": load_icon("save.png")
+            "save": load_icon("save.png"),
+            "pencil": load_icon("white_pencil.png"),
         }
 
         self.frame = ttk.Frame(master, padding=20)
