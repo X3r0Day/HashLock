@@ -36,6 +36,7 @@ CONFIG_FILE = save.user_data_path("config.json")
 STOR_CONFIG_FILE = save.user_data_path("stor/config.json")
 DATA_FILE = save.user_data_path("stor/data.json")
 
+DEFAULT_FONT = "Segoe UI"
 
 class PasswordManagerGUI:
     def __init__(self, root, frame):
@@ -110,7 +111,7 @@ class PasswordManagerGUI:
     def setup_ui(self):
         self.clear_window()
 
-        ttk.Label(self.frame, text="First Time Setup", font=("Segoe UI", 16)).grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        ttk.Label(self.frame, text="First Time Setup", font=(DEFAULT_FONT, 16)).grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         
         ttk.Label(self.frame, text="Enter Master Password:").grid(row=1, column=0, sticky="e", padx=10, pady=10)
         self.setup_pwd_entry = ttk.Entry(self.frame, show="*")
@@ -143,7 +144,7 @@ class PasswordManagerGUI:
             return
         
         pwd_bytes = pwd.encode('utf-8')
-        # print(type(pwd_bytes)) # DEBUG
+        pwd_bytes = pwd.encode('utf-8')
 
         hashed = bcrypt.hashpw(pwd_bytes, bcrypt.gensalt()).decode('utf-8')
         with open(CONFIG_FILE, "w") as f:
@@ -160,7 +161,7 @@ class PasswordManagerGUI:
     def login_ui(self):
         self.clear_window()
 
-        ttk.Label(self.frame, text="Login", font=("Segoe UI", 16)).grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        ttk.Label(self.frame, text="Login", font=(DEFAULT_FONT, 16)).grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         ttk.Label(self.frame, text="Enter Master Password:").grid(row=1, column=0, sticky="e", padx=10, pady=10)
         
         self.login_pwd_entry = ttk.Entry(self.frame, show="*")
@@ -193,10 +194,10 @@ class PasswordManagerGUI:
     def menu_ui(self):
         self.clear_window()
 
-        ttk.Label(self.frame, text="HashLock Password", font=("Segoe UI", 16)).grid(row=0, column=0, columnspan=1, padx=10, pady=10)
+        ttk.Label(self.frame, text="HashLock Password", font=(DEFAULT_FONT, 16)).grid(row=0, column=0, columnspan=1, padx=10, pady=10)
         ttk.Button(self.frame, image=self.icons["add"], text="New File", command=self.create_file, compound="left", width=10).grid(row=1, column=0, padx=10, pady=10)
         ttk.Button(self.frame, image=self.icons["bin"], text="Delete File", command=self.delete_file, compound="left", width=10).grid(row=3, column=0, padx=10, pady=10)
-        ttk.Button(self.frame, image=self.icons["pencil"], text=" Edit File", command=self.edit_file, compound="left", width=10).grid(row=4, column=0, padx=10, pady=10)
+        ttk.Button(self.frame, image=self.icons["pencil"], text=" Edit File", command=self.open_file, compound="left", width=10).grid(row=4, column=0, padx=10, pady=10)
         ttk.Button(self.frame, image=self.icons["lock"], text="   Exit", command=self.root.quit, compound="left", width=10).grid(row=5, column=0, padx=10, pady=10)
 
     def create_file(self):
@@ -217,10 +218,6 @@ class PasswordManagerGUI:
         self.clear_window()
         dl.DeleteFileUI(self.frame, self.fernet, self.menu_ui)
 
-    def edit_file(self):
-        self.clear_window()
-        lf.OpenEditFileUI(self.frame, self.fernet, self.menu_ui)
-
 
 def main():
     
@@ -230,7 +227,7 @@ def main():
     root = tk.Tk()
     frame = ttk.Frame(root, padding=20)
     frame.pack(expand=True)
-    app = PasswordManagerGUI(root, frame)
+    PasswordManagerGUI(root, frame)
     root.mainloop()
 
 if __name__ == "__main__":
