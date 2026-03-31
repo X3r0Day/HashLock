@@ -7,7 +7,6 @@
 
 > A secure and easy-to-use password manager with a clean Tkinter GUI.  
 > Master password authentication with bcrypt and encrypted file storage using Fernet.
-> I WRITE VERY CLEAN CODE WHICH IS EASY TO UNDERSTAND
 
 ---
 
@@ -78,3 +77,6 @@ HashLock Password Manager is licensed under the MIT License.
 See the [`LICENSE`](https://github.com/X3r0Day/HashLock/blob/main/LICENSE) file for details.
 
 ---
+
+THIS USER HAS CONTRIBUTED TO: https://github.com/torvalds/linux
+THIS USER HAS CONTRIBUTED TO: https://github.com/danielmiessler/seclists
