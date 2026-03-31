@@ -7,6 +7,7 @@
 
 > A secure and easy-to-use password manager with a clean Tkinter GUI.  
 > Master password authentication with bcrypt and encrypted file storage using Fernet.
+> I WRITE VERY CLEAN CODE WHICH IS EASY TO UNDERSTAND
 
 ---
 
