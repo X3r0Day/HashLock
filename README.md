@@ -78,5 +78,3 @@ See the [`LICENSE`](https://github.com/X3r0Day/HashLock/blob/main/LICENSE) file 
 
 ---
 
-THIS USER HAS CONTRIBUTED TO: https://github.com/torvalds/linux
-THIS USER HAS CONTRIBUTED TO: https://github.com/danielmiessler/seclists
